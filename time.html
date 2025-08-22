@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kindle 北京时间</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-weight: 900;
+            flex-direction: column;
+        }
+
+        #clock-container {
+            transform: rotate(90deg) scale(0.9, 1.2);
+            white-space: nowrap;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #date {
+            font-size: 8vmin;
+            margin-bottom: 0.5vmin;
+            color: #aaa;
+        }
+
+        .time-part {
+            border-width: 3px;
+            border-style: solid;
+            border-radius: 10px;
+            padding: 1vmin 2vmin;
+            display: inline-block;
+            margin: 0 0.5vmin;
+        }
+
+        #hour {
+            color: white;
+            border-color: white;
+        }
+
+        #minute {
+            color: #aaa;
+            border-color: #aaa;
+        }
+
+        #second {
+            color: #777;
+            border-color: #777;
+        }
+
+        .time-text {
+            font-size: 25vmin;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="clock-container">
+        <div id="date"></div>
+        <div id="time-wrapper">
+            <span id="hour" class="time-part time-text"></span>
+            <span id="minute" class="time-part time-text"></span>
+            <span id="second" class="time-part time-text"></span>
+        </div>
+    </div>
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const beijingTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
+                timeZone: 'Asia/Shanghai',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+            });
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('date').textContent = beijingTimeFormatter.format(now);
+            document.getElementById('hour').textContent = hours;
+            document.getElementById('minute').textContent = minutes;
+            document.getElementById('second').textContent = seconds;
+
+            const randomInterval = Math.floor(Math.random() * 11 + 10) * 1000;
+            setTimeout(updateTime, randomInterval);
+        }
+
+        updateTime();
+    </script>
+
+</body>
+</html>
