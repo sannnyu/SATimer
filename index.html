@@ -3,102 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kindle 北京时间</title>
+    <title>Kindle 时间</title>
     <style>
         body {
             background-color: black;
             color: white;
-            font-family: sans-serif;
+            font-family: monospace;
+            text-align: center;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
             font-weight: 900;
-            flex-direction: column;
+            display: table;
+            width: 100%;
+            height: 100%;
         }
 
-        #clock-container {
-            transform: rotate(90deg) scale(0.9, 1.2);
-            white-space: nowrap;
+        .table-cell {
+            display: table-cell;
+            vertical-align: middle;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        #date {
-            font-size: 8vmin;
-            margin-bottom: 0.5vmin;
-            color: #aaa;
         }
 
         .time-part {
-            border-width: 3px;
-            border-style: solid;
-            border-radius: 10px;
-            padding: 1vmin 2vmin;
-            display: inline-block;
-            margin: 0 0.5vmin;
+            font-size: 180px;
+            /* 确保每个部分都独占一行且没有上下间距 */
+            display: block;
+            margin: 0; 
+            line-height: 1; /* 进一步确保行高最小 */
         }
 
         #hour {
             color: white;
-            border-color: white;
         }
 
         #minute {
             color: #aaa;
-            border-color: #aaa;
         }
 
         #second {
             color: #777;
-            border-color: #777;
-        }
-
-        .time-text {
-            font-size: 25vmin;
         }
     </style>
 </head>
 <body>
-
-    <div id="clock-container">
-        <div id="date"></div>
-        <div id="time-wrapper">
-            <span id="hour" class="time-part time-text"></span>
-            <span id="minute" class="time-part time-text"></span>
-            <span id="second" class="time-part time-text"></span>
+    <div style="display: table; width: 100%; height: 100%;">
+        <div style="display: table-cell; vertical-align: middle; text-align: center;">
+            <div class="time-wrapper">
+                <span id="hour" class="time-part"></span>
+                <span id="minute" class="time-part"></span>
+                <span id="second" class="time-part"></span>
+            </div>
         </div>
     </div>
 
     <script>
         function updateTime() {
-            const now = new Date();
-            const beijingTimeFormatter = new Intl.DateTimeFormat('zh-CN', {
-                timeZone: 'Asia/Shanghai',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-            });
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://quan.suning.com/getSysTime.do', true);
 
-            document.getElementById('date').textContent = beijingTimeFormatter.format(now);
-            document.getElementById('hour').textContent = hours;
-            document.getElementById('minute').textContent = minutes;
-            document.getElementById('second').textContent = seconds;
+            xhr.onload = function () {
+                var randomInterval = Math.floor(Math.random() * 11 + 10) * 1000;
+                
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    var data = JSON.parse(xhr.responseText);
+                    var sysTime = data.sysTime2;
+                    var timeString = sysTime.substring(11, 19);
 
-            const randomInterval = Math.floor(Math.random() * 11 + 10) * 1000;
-            setTimeout(updateTime, randomInterval);
+                    var parts = timeString.split(':');
+                    var hours = parts[0];
+                    var minutes = parts[1];
+                    var seconds = parts[2];
+                    
+                    document.getElementById('hour').innerHTML = hours;
+                    document.getElementById('minute').innerHTML = minutes;
+                    document.getElementById('second').innerHTML = seconds;
+                    
+                    setTimeout(updateTime, randomInterval);
+                } else {
+                    setTimeout(updateTime, 60000);
+                }
+            };
+            
+            xhr.onerror = function () {
+                setTimeout(updateTime, 60000);
+            };
+
+            xhr.send();
         }
 
         updateTime();
     </script>
-
 </body>
 </html>
