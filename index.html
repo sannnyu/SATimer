@@ -6,8 +6,8 @@
     <title>Kindle 时间</title>
     <style>
         body {
-            background-color: black;
-            color: white;
+            background-color: white; /* 背景改为白色 */
+            color: black;            /* 字体改为黑色 */
             font-family: monospace;
             text-align: center;
             margin: 0;
@@ -24,41 +24,54 @@
             text-align: center;
         }
 
+        .time-table {
+            border-collapse: collapse;
+            margin: auto;
+        }
+
+        .time-cell {
+            padding: 0;
+        }
+        
         .time-part {
             font-size: 180px;
-            /* 确保每个部分都独占一行且没有上下间距 */
-            display: block;
-            margin: 0; 
-            line-height: 1; /* 进一步确保行高最小 */
+            text-align: center;
         }
 
         #hour {
-            color: white;
+            color: black;  /* 小时字体改为黑色 */
         }
 
         #minute {
-            color: #aaa;
+            color: #555;  /* 分钟字体改为深灰色 */
         }
 
         #second {
-            color: #777;
+            color: #888;  /* 秒钟字体改为浅灰色 */
         }
     </style>
 </head>
 <body>
     <div style="display: table; width: 100%; height: 100%;">
         <div style="display: table-cell; vertical-align: middle; text-align: center;">
-            <div class="time-wrapper">
-                <span id="hour" class="time-part"></span>
-                <span id="minute" class="time-part"></span>
-                <span id="second" class="time-part"></span>
-            </div>
+            <table class="time-table">
+                <tr>
+                    <td class="time-cell"><div id="hour" class="time-part"></div></td>
+                </tr>
+                <tr>
+                    <td class="time-cell"><div id="minute" class="time-part"></div></td>
+                </tr>
+                <tr>
+                    <td class="time-cell"><div id="second" class="time-part"></div></td>
+                </tr>
+            </table>
         </div>
     </div>
 
     <script>
         function updateTime() {
             var xhr = new XMLHttpRequest();
+            // 将HTTP更改为HTTPS
             xhr.open('GET', 'https://quan.suning.com/getSysTime.do', true);
 
             xhr.onload = function () {
@@ -95,4 +108,3 @@
     </script>
 </body>
 </html>
-
