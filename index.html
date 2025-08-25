@@ -3,108 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kindle 时间</title>
-    <style>
-        body {
-            background-color: white; /* 背景改为白色 */
-            color: black;            /* 字体改为黑色 */
-            font-family: monospace;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-            font-weight: 900;
-            display: table;
-            width: 100%;
-            height: 100%;
-        }
-
-        .table-cell {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-        }
-
-        .time-table {
-            border-collapse: collapse;
-            margin: auto;
-        }
-
-        .time-cell {
-            padding: 0;
-        }
-        
-        .time-part {
-            font-size: 180px;
-            text-align: center;
-        }
-
-        #hour {
-            color: black;  /* 小时字体改为黑色 */
-        }
-
-        #minute {
-            color: #555;  /* 分钟字体改为深灰色 */
-        }
-
-        #second {
-            color: #888;  /* 秒钟字体改为浅灰色 */
-        }
-    </style>
+    <title>简约时钟</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div style="display: table; width: 100%; height: 100%;">
-        <div style="display: table-cell; vertical-align: middle; text-align: center;">
-            <table class="time-table">
-                <tr>
-                    <td class="time-cell"><div id="hour" class="time-part"></div></td>
-                </tr>
-                <tr>
-                    <td class="time-cell"><div id="minute" class="time-part"></div></td>
-                </tr>
-                <tr>
-                    <td class="time-cell"><div id="second" class="time-part"></div></td>
-                </tr>
-            </table>
-        </div>
+    <div id="clock-container">
+        <div id="time"></div>
+        <div id="date"></div>
     </div>
+    <button id="fullscreen-btn">全屏</button>
 
-    <script>
-        function updateTime() {
-            var xhr = new XMLHttpRequest();
-            // 将HTTP更改为HTTPS
-            xhr.open('GET', 'https://quan.suning.com/getSysTime.do', true);
-
-            xhr.onload = function () {
-                var randomInterval = Math.floor(Math.random() * 11 + 10) * 1000;
-                
-                if (xhr.status >= 200 && xhr.status < 400) {
-                    var data = JSON.parse(xhr.responseText);
-                    var sysTime = data.sysTime2;
-                    var timeString = sysTime.substring(11, 19);
-
-                    var parts = timeString.split(':');
-                    var hours = parts[0];
-                    var minutes = parts[1];
-                    var seconds = parts[2];
-                    
-                    document.getElementById('hour').innerHTML = hours;
-                    document.getElementById('minute').innerHTML = minutes;
-                    document.getElementById('second').innerHTML = seconds;
-                    
-                    setTimeout(updateTime, randomInterval);
-                } else {
-                    setTimeout(updateTime, 60000);
-                }
-            };
-            
-            xhr.onerror = function () {
-                setTimeout(updateTime, 60000);
-            };
-
-            xhr.send();
-        }
-
-        updateTime();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
